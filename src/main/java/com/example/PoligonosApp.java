@@ -13,17 +13,8 @@ import java.util.function.BinaryOperator;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-/**
- * Uma aplicação desktop (usando a biblioteca <a href="http://openjfx.io"> OpenJFX (JavaFX)</a>)
- * que desenha polígonos na tela e calcula o perímetro de cada um:
- * a soma da distância entre todos os seus pontos.
- */
 public class PoligonosApp extends Application {
-    /**
-     * Lista onde cada elemento representa os pontos que formam um polígono.
-     * Cada elemento é então uma lista de pontos com coordenadas x,y.
-     * Assim, cada polígono é formado por uma lista de pontos.
-     */
+
     private final List<List<Point>> pontosPoligonos = List.of(
         // Quadrilátero (Quadrado)
         List.of(
@@ -68,18 +59,10 @@ public class PoligonosApp extends Application {
         )
     );
 
-    /**
-     * Executa a aplicação
-     * @param args
-     */
     public static void main(String[] args) {
         launch(args);
     }
 
-    /**
-     * Inicia a apresentação da interface gráfica da aplicação.
-     * @param mainStage janela inicial da aplicação
-     */
     @Override
     public void start(final Stage mainStage) {
         final var root = new Pane();
@@ -114,25 +97,19 @@ public class PoligonosApp extends Application {
         return label;
     }
 
-    /**
-     * Descobre o tipo de cada polígono a partir da quantidade de pontos que ele tem.
-     * Se um polígono representado por um elemento na lista {@link #pontosPoligonos} tiver 4 pontos,
-     * ele é um "Quadrilátero", se tiver 3 é um "Triângulo" e assim por diante.
-     *
-     * <p>A implementação do método deve usar a operação {@link Stream#flatMap(Function)} que
-     * percorre os itens de {@link #pontosPoligonos} (cada item representando um polígono).
-     * O flatMap recebe então cada um destes itens, que é uma lista de pontos.
-     * A partir de tal lista, deve obter o total de pontos.
-     * Em uma operação posterior na cadeia de Stream, deve-se verificar
-     * qual o total de pontos de cada item que representa um polígono
-     * e devolver uma String indicando o tipo de polígono.</p>
-     *
-     * @return uma lista de String indicando se o polígono é um "quadrilátero" (quadrado ou retângulo),
-     * "triângulo", "pentágono", "hexágono" ou apenas um "polígono" geral quando tiver mais de 6 lados.
-     */
     protected List<String> tipoPoligonos(){
-        // TODO Apague esta linha e a próxima e implemente seu código
-        return List.of();
+        return pontosPoligonos.stream()
+                .map(listaPontos -> {
+                    return switch (listaPontos.size()) {
+                        case 3 -> "Triângulo";
+                        case 4 -> "Quadrilátero";
+                        case 5 -> "Pentágono";
+                        case 6 -> "Hexágono";
+                        default -> "Polígono";
+                    };
+                })
+                .map(String::toLowerCase)
+                .toList();
     }
 
     /**
